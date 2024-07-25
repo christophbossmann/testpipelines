@@ -1,0 +1,48 @@
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+    inputs:
+      message:
+        description: Message to mark the update with a message. Leave empty for standard message.
+        required: false
+        type: string
+      gitTag:
+        description: Tag to checkout from. Leave empty if newest commit from 'dev' branch should be used.
+        required: false
+        type: string
+      executeCheerio:
+        description: Build Cheerio App
+        type: boolean
+        required: false
+        default: true
+      executeCheerioKids:
+        description: Build Cheerio Kids App
+        type: boolean
+        required: false
+        default: true
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - name: 😃 Hello Playnconnect Team 🃏🍹🚀
+        run: echo "Hey, we wish good luck to the Playnconnect-Team building the App(s) 🃏🍹🚀"
+      
+      - name: ⚙️ Setup repo
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.gitTag && format('refs/tags/{0}', inputs.gitTag) || 'dev' }}
+
+      - name: 🚀 Build cheerio app for android, profile 'dev'
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        if: ${{ inputs.executeCheerio || || steps.check_trigger.outputs.isCronJob == 'true'}}
+        run: echo "Would build dev normal cheerio profile on android"
+
+      - name: 🚀 Build cheerio kids app for android, profile 'dev_kids'
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        if: ${{ inputs.executeCheerioKids || steps.check_trigger.outputs.isCronJob == 'true'}}
+        run: echo "Would build dev kids profile cheerfully on android"
