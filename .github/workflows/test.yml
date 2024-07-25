@@ -36,13 +36,9 @@ jobs:
           ref: ${{ inputs.gitTag && format('refs/tags/{0}', inputs.gitTag) || 'dev' }}
 
       - name: 🚀 Build cheerio app for android, profile 'dev'
-        env:
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-        if: ${{ inputs.executeCheerio || steps.check_trigger.outputs.isCronJob == 'true'}}
+        if: ${{ inputs.executeCheerio || github.event_name == 'schedule'}}
         run: echo "Would build dev normal cheerio profile on android"
 
       - name: 🚀 Build cheerio kids app for android, profile 'dev_kids'
-        env:
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-        if: ${{ inputs.executeCheerioKids || steps.check_trigger.outputs.isCronJob == 'true'}}
+        if: ${{ inputs.executeCheerioKids || github.event_name == 'schedule'}}
         run: echo "Would build dev kids profile cheerfully on android"
