@@ -38,7 +38,7 @@ jobs:
       - name: 🚀 Build cheerio app for android, profile 'dev'
         env:
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-        if: ${{ inputs.executeCheerio || || steps.check_trigger.outputs.isCronJob == 'true'}}
+        if: ${{ inputs.executeCheerio || steps.check_trigger.outputs.isCronJob == 'true'}}
         run: echo "Would build dev normal cheerio profile on android"
 
       - name: 🚀 Build cheerio kids app for android, profile 'dev_kids'
